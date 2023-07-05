@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Preview Extension",
+  "description": "An Extension to preview links, images, and media without going to a new tab.",
+  "version": "1.0",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting",
+    "offscreen",
+    "sidePanel",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],  
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/16x16.png",
+      "32": "assets/32x32.png",
+      "64": "assets/64x64.png",
+      "128": "assets/128x128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/16x16.png",
+    "32": "assets/32x32.png",
+    "64": "assets/64x64.png",
+    "128": "assets/128x128.png"
+  }
+}
