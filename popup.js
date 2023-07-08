@@ -1,8 +1,11 @@
-chrome.storage.local.get(["previewUrl"], function(result) {
-    const previewUrl = result.previewUrl;
-    if (previewUrl) {
-      const previewFrame = document.getElementById("previewFrame");
-      previewFrame.src = previewUrl;
-    }
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the close button element
+    const closeButton = document.getElementById("closeButton");
+  
+    // Add a click event listener to the close button
+    closeButton.addEventListener("click", function() {
+      // Close the current popup window
+      window.close();
+    });
   });
   

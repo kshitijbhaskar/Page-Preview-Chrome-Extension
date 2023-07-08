@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview Popup</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+  </style>
+  <script src="popup.js"></script>
 </head>
 <body>
-  <!-- <iframe id="previewFrame" width="100%" height="100%" frameborder="0"></iframe>
-  <script src="popup.js"></script> -->
+  <div class="container">
+    <div class="logo-container">
+      <div class="logo"></div>
+    </div>
+    <h1>Preview Popup</h1>
+    <p> To open a preview, right-click on the link and select "Preview Page" from the context menu.</p>
+    <p> You can also open the preview in a separate popup window.</p>
+    <p> Enjoy using the extension!</p>
+    <a href="#" class="button" id="closeButton">Close</a>
+  </div>
 </body>
 </html>

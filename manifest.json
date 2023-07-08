@@ -8,38 +8,47 @@
     "activeTab",
     "storage",
     "scripting",
-    "offscreen",
-    "sidePanel",
     "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/close.png",
+        "assets/reload.png",
+        "assets/popup.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
   ],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],  
   "cross_origin_embedder_policy": {
     "value": "require-corp"
   },
   "cross_origin_opener_policy": {
     "value": "same-origin"
   },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-inline'; object-src 'self'"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/16x16.png",
       "32": "assets/32x32.png",
-      "64": "assets/64x64.png",
+      "64": "assets/48x48.png",
       "128": "assets/128x128.png"
     }
   },
   "icons": {
     "16": "assets/16x16.png",
     "32": "assets/32x32.png",
-    "64": "assets/64x64.png",
+    "64": "assets/48x48.png",
     "128": "assets/128x128.png"
   }
 }
