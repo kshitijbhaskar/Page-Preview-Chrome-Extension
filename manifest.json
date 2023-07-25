@@ -18,7 +18,9 @@
       "resources": [
         "assets/close.png",
         "assets/reload.png",
-        "assets/popup.png"
+        "assets/popup.png",
+        "assets/flip-left.png",
+        "assets/flip-right.png"
       ],
       "matches": ["<all_urls>"]
     }

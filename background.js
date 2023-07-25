@@ -45,37 +45,33 @@ function createPopupWindow(url,tab) {
 
 function injectedFunction(url, mediaType) {
   const linkUrl = url;
+  var position = "right";
 
   const container = document.createElement("div");
   container.setAttribute("class", "previewContainer");
   container.style.position = "fixed";
   container.style.display = "flex";
-  container.style.flexFlow = "column wrap";
-  container.style.alignItems = "flex-start";
+  container.style.flexFlow = "row wrap";
+  // container.style.flexWrap = "wrap";
   container.style.top = "0";
   container.style.right = "0";
   container.style.width = "50%";
-  container.style.paddingLeft = "5px";
   container.style.height = "100%";
-  container.style.zIndex = "9999";
+  container.style.zIndex = "999999";
   container.style.overflow = "hidden";
-
+  
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  buttonContainer.style.flexDirection = "column";
+  buttonContainer.style.padding = "2px";
   
   const reloadButton = document.createElement("button");
   const reload = document.createElement("img");
   reload.src = chrome.runtime.getURL("assets/reload.png");
   reload.alt = "R";
-  reload.style.height = "20px"; 
+  reload.style.height = "15px"; 
+  reload.style.width = "15px"; 
   reloadButton.appendChild(reload);
-  reloadButton.style.margin = "2.5px";
-  reloadButton.style.padding = "5px 5px";
-  reloadButton.style.border = "none";
-  reloadButton.style.background = "white";
-  reloadButton.style.color = "inherit";
-  reloadButton.style.cursor = "pointer";
-  reloadButton.style.fontFamily = "sans-serif";
-  reloadButton.style.borderRadius = "0.5rem";
-  reloadButton.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.5)";
   reloadButton.title = "Reload Preview";
 
   
@@ -83,39 +79,51 @@ function injectedFunction(url, mediaType) {
   const close = document.createElement("img");
   close.src = chrome.runtime.getURL("assets/close.png");
   close.alt = "X";
-  close.style.height = "20px";
+  close.style.height = "15px";
+  close.style.width = "15px";
   closeButton.appendChild(close);
-  closeButton.style.margin = "2.5px";
-  closeButton.style.padding = "5px 5px";
-  closeButton.style.border = "none";
-  closeButton.style.background = "white";
-  closeButton.style.color = "inherit";
-  closeButton.style.cursor = "pointer";
-  closeButton.style.fontFamily = "sans-serif";
-  closeButton.style.borderRadius = "0.5rem";
-  closeButton.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.5)";
   closeButton.title = "Close Preview";
   
   closeButton.addEventListener("click", () => {
     container.remove();
   });
   
+  const changeButton = document.createElement("button");
+  const change = document.createElement("img");
+  change.src = chrome.runtime.getURL("assets/flip-left.png");
+  change.alt = "<";
+  change.style.height = "15px";
+  change.style.width = "15px";
+  changeButton.appendChild(change);
+  changeButton.title = "Flip Preview";
+  
+  changeButton.addEventListener("click", () => {
+    if (position === "left") {
+      // Change orientation to right
+      container.style.flexFlow = "row wrap"; // Adjust the justify-content property
+      container.style.left = null;
+      container.style.right = "0";
+      change.src = chrome.runtime.getURL("assets/flip-left.png");
+      change.alt = "<";
+      position = "right";
+    } else if (position === "right") {
+      // Change orientation to left
+      container.style.flexFlow = "row-reverse wrap"; // Adjust the justify-content property
+      container.style.left = "0";
+      container.style.right = null;
+      change.src = chrome.runtime.getURL("assets/flip-right.png");
+      change.alt = ">";
+      position = "left";
+    }
+  });
+  
   const popupButton = document.createElement("button");
   const popup = document.createElement("img");
   popup.src = chrome.runtime.getURL("assets/popup.png");
   popup.alt = "O";
-  popup.style.height = "20px";
+  popup.style.height = "15px";
+  popup.style.width = "15px";
   popupButton.appendChild(popup);
-  popupButton.style.margin = "2.5px";
-  popupButton.style.padding = "5px 5px";
-  popupButton.style.border = "none";
-  popupButton.style.background = "white";
-  popupButton.style.color = "inherit";
-  popupButton.style.cursor = "pointer";
-  popupButton.style.fontFamily = "sans-serif";
-  popupButton.style.borderRadius = "0.5rem";
-  popupButton.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.5)";
-  // popupButton.style.marginRight = "50%";
   popupButton.title = "Open Preview Popup";
   
   // const handleClickOutsideContainer = (event) => {
@@ -132,10 +140,11 @@ function injectedFunction(url, mediaType) {
   
   const handle = document.createElement("div");
   handle.style.top = "0";
-  handle.style.left = "0";
+  // handle.style.left = "0";
 handle.style.width = "5px";
 handle.style.height = "100%";
-// handle.style.background = "white";
+handle.style.background = "rgb(255 255 255 / 5%)"
+handle.style.backdropFilter = "blur(1.5px))"
 handle.style.cursor = "ew-resize";
 handle.style.position = "relative";
 handle.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
@@ -148,9 +157,13 @@ handle.addEventListener("mousedown", function(event) {
   
   function handleMouseMove(event) {
     handle.style.position = "null";
-    const width = startWidth - (event.pageX - startX);
-    container.style.width = width + "px";
-    mediaElement.style.width = "100%"; 
+    if(position === "right"){
+      container.style.width = startWidth - (event.pageX - startX) + "px";
+    }
+    else if(position === "left"){
+      container.style.width = startWidth + (event.pageX - startX) + "px";
+    }
+    // mediaElement.style.width = "100%"; 
   }
   
   function handleMouseUp() {
@@ -163,34 +176,53 @@ handle.addEventListener("mousedown", function(event) {
   document.addEventListener("mouseup", handleMouseUp);
 });
 
+const media = document.createElement("div");
+media.style.background = "white";
+media.style.flex = 1;
+
 if (mediaType === "image") {
-  mediaElement = document.createElement("img");
+  const mediaElement = document.createElement("img");
   mediaElement.src = linkUrl;
   mediaElement.alt = "Preview Image";
   mediaElement.style.width = "100%";
   mediaElement.style.height = "100%";
+  media.appendChild(mediaElement);
 } else if (mediaType === "video") {
-  mediaElement = document.createElement("video");
+  const mediaElement = document.createElement("video");
   mediaElement.src = linkUrl;
   mediaElement.style.width = "100%";
   mediaElement.style.height = "100%";
   mediaElement.controls = true;
+  media.appendChild(mediaElement);
 } else if (mediaType === "link"){
-  mediaElement = document.createElement("iframe");
+  const mediaElement = document.createElement("iframe");
   mediaElement.src = linkUrl;
   mediaElement.style.width = "100%";
   mediaElement.style.height = "100%";
+  media.appendChild(mediaElement);
 }
 
-reloadButton.addEventListener("click", () => {
-  mediaElement.src = linkUrl;
+reloadButton.addEventListener("click", (event) => {
+  if (mediaType === "image") {
+    const currentMediaElement = event.target.closest(".previewContainer").querySelector("img");
+    currentMediaElement.src = linkUrl; 
+  } else if (mediaType === "video") {
+    const currentMediaElement = event.target.closest(".previewContainer").querySelector("video");
+    currentMediaElement.src = linkUrl; 
+  } else if (mediaType === "link"){
+    const currentMediaElement = event.target.closest(".previewContainer").querySelector("iframe");
+    currentMediaElement.src = linkUrl; 
+  }
 });
 
-container.appendChild(closeButton);
-container.appendChild(popupButton);
-container.appendChild(reloadButton);
+
+buttonContainer.appendChild(closeButton);
+buttonContainer.appendChild(popupButton);
+buttonContainer.appendChild(reloadButton);
+buttonContainer.appendChild(changeButton);
+container.appendChild(buttonContainer);
 container.appendChild(handle);
-container.appendChild(mediaElement);
+container.appendChild(media);
 document.body.appendChild(container);
 
   if (popupButton) {
@@ -199,6 +231,35 @@ document.body.appendChild(container);
       chrome.runtime.sendMessage({ action: "createPopupWindow", url: linkUrl });
     });
   }
+
+    const buttons = document.querySelectorAll("button");
+
+  buttons.forEach((button) => {
+    button.style.display = "flex";
+    button.style.alignContent = "center";
+    button.style.height = "25px";
+    button.style.widtht = "25px";
+    button.style.margin = "2.5px";
+    button.style.padding = "5px 5px";
+    button.style.border = "none";
+    button.style.background = "rgb(255 255 255 / 50%)";
+    button.style.backdropFilter = "blur(1.5px)";
+    button.style.color = "inherit";
+    button.style.cursor = "pointer";
+    button.style.fontFamily = "sans-serif";
+    button.style.borderRadius = "0.5rem";
+    button.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.5)";
+    button.style.opacity = "0.25";
+    button.style.transition = "opacity 0.3s ease";
+
+    button.addEventListener("mouseenter", function () {
+      button.style.opacity = "1";
+    });
+
+    button.addEventListener("mouseleave", function () {
+      button.style.opacity = "0.25";
+    });
+  });
 }
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
