@@ -57,7 +57,7 @@ function injectedFunction(url, mediaType) {
   container.style.right = "0";
   container.style.width = "50%";
   container.style.height = "100%";
-  container.style.zIndex = "999999";
+  container.style.zIndex = "999998";
   container.style.overflow = "hidden";
   
   const buttonContainer = document.createElement("div");
@@ -73,6 +73,7 @@ function injectedFunction(url, mediaType) {
   reload.style.width = "15px"; 
   reloadButton.appendChild(reload);
   reloadButton.title = "Reload Preview";
+  reloadButton.setAttribute("class", "buttons");
 
   
   const closeButton = document.createElement("button");
@@ -83,6 +84,7 @@ function injectedFunction(url, mediaType) {
   close.style.width = "15px";
   closeButton.appendChild(close);
   closeButton.title = "Close Preview";
+  closeButton.setAttribute("class", "buttons");
   
   closeButton.addEventListener("click", () => {
     container.remove();
@@ -96,6 +98,7 @@ function injectedFunction(url, mediaType) {
   change.style.width = "15px";
   changeButton.appendChild(change);
   changeButton.title = "Flip Preview";
+  changeButton.setAttribute("class", "buttons");
   
   changeButton.addEventListener("click", () => {
     if (position === "left") {
@@ -125,6 +128,7 @@ function injectedFunction(url, mediaType) {
   popup.style.width = "15px";
   popupButton.appendChild(popup);
   popupButton.title = "Open Preview Popup";
+  popupButton.setAttribute("class", "buttons");
   
   // const handleClickOutsideContainer = (event) => {
   //   console.log(event.target);
@@ -141,22 +145,35 @@ function injectedFunction(url, mediaType) {
   const handle = document.createElement("div");
   handle.style.top = "0";
   // handle.style.left = "0";
-handle.style.width = "5px";
+handle.style.width = "8px";
 handle.style.height = "100%";
-handle.style.background = "rgb(255 255 255 / 5%)"
-handle.style.backdropFilter = "blur(1.5px))"
+handle.style.background = "rgb(255 255 255 / 0%)"
+// handle.style.backdropFilter = "blur(1.5px))"
 handle.style.cursor = "ew-resize";
-handle.style.position = "relative";
-handle.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+handle.style.position = "absolute";
+handle.style.marginLeft = "32px";
+handle.style.marginRight = "32px";
+handle.style.zIndex = "999999";
+// handle.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+  
+  const handleBar = document.createElement("div");
+  handleBar.style.top = "0";
+  // handle.style.left = "0";
+handleBar.style.width = "5px";
+handleBar.style.height = "100%";
+handleBar.style.background = "rgb(255 255 255 / 5%)"
+handleBar.style.backdropFilter = "blur(1.5px))"
+// handleBar.style.cursor = "ew-resize";
+handleBar.style.position = "relative";
+handleBar.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
 
 handle.addEventListener("mousedown", function(event) {
-  // handle.style.zIndex = "9999999";
   const startX = event.pageX;
   const startWidth = container.offsetWidth;
-  handle.style.width = "25px";
-  
+  handle.style.width = "100%";
+  handle.style.zIndex = "1000000";
   function handleMouseMove(event) {
-    handle.style.position = "null";
+    // handle.style.position = "null";
     if(position === "right"){
       container.style.width = startWidth - (event.pageX - startX) + "px";
     }
@@ -167,7 +184,8 @@ handle.addEventListener("mousedown", function(event) {
   }
   
   function handleMouseUp() {
-    handle.style.width = "5px";
+    handle.style.width = "8px";
+    handle.style.zIndex = "999999";
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
   }
@@ -222,6 +240,7 @@ buttonContainer.appendChild(reloadButton);
 buttonContainer.appendChild(changeButton);
 container.appendChild(buttonContainer);
 container.appendChild(handle);
+container.appendChild(handleBar);
 container.appendChild(media);
 document.body.appendChild(container);
 
@@ -232,7 +251,7 @@ document.body.appendChild(container);
     });
   }
 
-    const buttons = document.querySelectorAll("button");
+    const buttons = document.querySelectorAll(".buttons");
 
   buttons.forEach((button) => {
     button.style.display = "flex";
